@@ -2,32 +2,120 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+html,
+body {
+  height: 100vh;
 }
 
-@media (prefers-color-scheme: dark) {
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 
+R (0)
+G (110)
+B (255 */
+
+@layer base {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background: 216 100% 98.04%;
+    --foreground: 184 66% 13.2%;
+
+    --primary: 166 60% 48%;
+    --primary-foreground: 0 0% 100%;
+
+    --card: 216 100% 98.04%;
+    --card-foreground: 184 66% 13.2%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 184 66% 13.2%;
+
+    --secondary: 176 100% 93%;
+    --secondary-foreground: 216 100% 0.98%;
+
+    --muted: 176 100% 93%;
+    --muted-foreground: 0 0% 40%;
+
+    --accent:176 100% 93%;
+    --accent-foreground: 166 60% 48%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 0 0% 90.2%;
+    --input: 0 0% 90.2%;
+    --ring: 166 60% 48%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Name: custom color palette
+       Author: Ilias Ism
+       URL: https://gradient.page */
+
+    /* CSS: .bg-gradient { background: var(--gradient) } */
+    --gradient: linear-gradient(to top left, #2caf91, #003bec);
+
+    --background: 166 60% 5%;
+    --foreground: 220 10% 97.2%;
+
+    --muted: 184 66% 13.2%;
+    --muted-foreground: 220 10% 54.4%;
+
+    --popover: 184 66% 10%;
+    --popover-foreground: 220 10% 97.2%;
+
+    --card: 184 66% 10%;
+    --card-foreground: 220 10% 97.2%;
+
+    --border: 184 66% 6%;
+    --input: 184 66% 6%;
+
+    --primary: 166 60% 43%;
+    --primary-foreground: 220 10% 97.2%;
+
+    --secondary: 170 51% 25%;
+    --secondary-foreground: 220 10% 97.2%;
+
+    --accent: 170 51% 25%;
+    --accent-foreground: 220 10% 97.2%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 220 10% 97.2%;
+
+    --ring: 166 60% 43%;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+.dotPattern {
+  background-image: radial-gradient(rgb(57, 203, 159) 1px, transparent 1px);
+  background-size: 25px 25px;
+}
+
+.use-automation-zoom-in {
+  animation: automation-zoom-in 0.5s;
+}
+
+@keyframes automation-zoom-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
