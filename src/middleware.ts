@@ -1,14 +1,16 @@
 import { authMiddleware } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'
 
-// This example protects all routes including api/trpc routes
-// Please edit this to allow other routes to be public as needed.
-// See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your Middleware
 export default authMiddleware({
-  publicRoutes: ['/site', '/api/uploadthing'],
+  publicRoutes: [
+    '/site',
+    '/api/uploadthing',
+    '/api/stripe/oauth/callback',          // ✅ OAuth code handling route
+    /^\/agency\/[^\/]+$/,                  // ✅ allow /agency/:agencyId for Stripe redirect
+  ],
   async beforeAuth(auth, req) {},
+
   async afterAuth(auth, req) {
-    //rewrite for domains
     const url = req.nextUrl
     const searchParams = url.searchParams.toString()
     let hostname = req.headers
@@ -17,7 +19,7 @@ export default authMiddleware({
       searchParams.length > 0 ? `?${searchParams}` : ''
     }`
 
-    //if subdomain exists
+    // Handle subdomain rewrites
     const customSubDomain = hostname
       .get('host')
       ?.split(`${process.env.NEXT_PUBLIC_DOMAIN}`)
@@ -29,10 +31,12 @@ export default authMiddleware({
       )
     }
 
+    // Redirect to custom sign-in
     if (url.pathname === '/sign-in' || url.pathname === '/sign-up') {
       return NextResponse.redirect(new URL(`/agency/sign-in`, req.url))
     }
 
+    // Rewrite root to /site
     if (
       url.pathname === '/' ||
       (url.pathname === '/site' && url.host === process.env.NEXT_PUBLIC_DOMAIN)
@@ -40,6 +44,7 @@ export default authMiddleware({
       return NextResponse.rewrite(new URL('/site', req.url))
     }
 
+    // Rewrite for agency and subaccount
     if (
       url.pathname.startsWith('/agency') ||
       url.pathname.startsWith('/subaccount')
